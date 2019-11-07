@@ -117,6 +117,14 @@ sob <- load_rma_data(remote = FALSE, years = 1989:2018)
 
 write_csv(sob, "data/sob_89-18.csv")
 
+sob <- read_csv("data/sob_89-18.csv")
+
+# sanity check
+sob %>%
+  group_by(year) %>%
+  summarize(prem = sum(prem, na.rm=TRUE)) %>% tail
+
+
 sob %>%
   filter(cropName %in% c("CORN", "SOYBEANS", "WHEAT") &
            stAbbr %in% c("IL","IN","IA","MN","NE") ) %>%
