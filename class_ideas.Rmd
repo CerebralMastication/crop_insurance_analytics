@@ -1,0 +1,20 @@
+---
+title: "Class Ideas"
+author: "JD Long"
+date: "10/15/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Things to know
+
+* `paste0()` & `paste()`
+* `read_delim()`
+* 
+
+
+bring journal article
+
