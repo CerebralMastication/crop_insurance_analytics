@@ -115,9 +115,9 @@ load_rma_data <- function(remote = TRUE,
 # so set remote = FALSE
 sob <- load_rma_data(remote = FALSE, years = 1989:2018)
 
-write_csv(sob, "data/sob_89-18.csv")
+write_csv(sob, "01_data/sob_89-18.csv")
 
-sob <- read_csv("data/sob_89-18.csv")
+sob <- read_csv("01_data/sob_89-18.csv")
 
 # sanity check
 sob %>%

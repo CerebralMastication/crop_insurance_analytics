@@ -3,7 +3,7 @@ title: "Introduction to R"
 subtitle: "<br/>with the Tidyverse<br/>and RMA SoB data"
 author: "James (JD) Long"
 institute: "Renaissance Reinsurance"
-date: "2019/11/07 (updated: `r Sys.Date()`)"
+date: "updated: `r Sys.Date()`"
 output:
   xaringan::moon_reader:
     css: [lucy, lucy-fonts]
@@ -16,6 +16,7 @@ output:
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
+library(skimr)
 ```
 
 ```{css, echo = FALSE}
@@ -46,9 +47,21 @@ class: center, middle
 # Let's Open<br/>`RStudio.cloud`
 
 ---
-screenshot of rstudio.cloud goes here
 
-background-image: url("")
+background-image: url("03_images/rstudio.cloud.png")
+background-position: center
+background-size: contain
+
+---
+
+background-image: url("03_images/hello_world.png")
+background-position: center
+background-size: contain
+
+---
+
+
+background-image: url("03_images/hello_yall.png")
 background-position: center
 background-size: contain
 

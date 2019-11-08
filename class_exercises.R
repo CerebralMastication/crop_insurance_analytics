@@ -4,7 +4,7 @@ library(tidyverse)
 library(skimr)
 
 ## show how to determine where a function comes from
-sob_limited_group_1 <- read_csv("data/sob_limited_group_1.csv")
+sob_limited_group_1 <- read_csv("01_data/sob_limited_group_1.csv")
 
 ## what do we see if we just type the dataframe name
 sob_limited_group_1
