@@ -104,6 +104,8 @@ ggplot(two_states_crops) +
   scale_color_hue() +
   theme_minimal()
 
+## gotchas with esquisse: have data preaggreaged.. this aint a pivot graph
+## ggplot likes long data, we should too
 
 ## spend some time unpacking ggplot syntax
 
