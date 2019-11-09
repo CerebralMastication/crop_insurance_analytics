@@ -3,9 +3,9 @@ example of how to use R for processing RMA/FCIC public crop insurance data
 
 ## Important Files
 
-`intro.r.Rmd` - 
+`intro.r.Rmd` - Presentation introducing R
 
-`sob_data.R` - 
+`sob_data.R` - script that loads the data into `01_data/` directory
 
 ### Directories
 

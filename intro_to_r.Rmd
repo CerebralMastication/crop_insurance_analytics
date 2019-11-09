@@ -6,7 +6,7 @@ institute: "Renaissance Reinsurance"
 date: "updated: `r Sys.Date()`"
 output:
   xaringan::moon_reader:
-    css: [lucy, lucy-fonts]
+    #css: [lucy, lucy-fonts]
     lib_dir: libs
     nature:
       highlightStyle: github
@@ -42,9 +42,101 @@ class: center, middle
 # A Little About Me...
 
 ---
+
+# Why am I doing this?
+
+## Who's getting paid & how?
+
+---
+class: center, middle
+# Why R? 
+
+--
+
+## Interactive
+
+--
+
+## Widely Used
+
+--
+
+## Data Analysis and Stats First
+
+--
+
+## Great Addon Packages (Tidyverse)
+
+--
+
+
+
+---
+
+# What's up with the Tidyverse?
+
+--
+
+## Libraries that work well together
+
+--
+
+## Consistent Syntax
+
+--
+
+## Easier to Learn / Remember
+---
+
+# Tidyverse (core)
+
+.pull-left[
+## 👇 ***Our Focus Today***
+### `dplyr` - data manupliation 
+### `ggplot2` - visualization 
+### `readr` - data import 
+### `tidyr` - data rearrangement (tidy-ing)
+]
+.pull-right[
+### `purrr` - functional programming with lists
+### `tibble` - modern data frames
+### `stringr` - string manipulation
+### `forcats` - categorical data
+]
+
+---
+
+background-image: url("03_images/konami.jpg")
+background-position: center
+background-size: contain
+
+---
+
+# Example Cheats
+
+--
+.pull-left[
+## RStudio Add ins:
+### `clipr` - output to clipboard
+### `datapasta` - paste from clipboard
+### `esquisse` - quick start graphs
+]
+--
+.pull-right[
+## Packages:
+### `Tidyverse` - shared social norms
+### `xlsx` - write to Excel
+
+## Cheat Sheets:
+### In the Help menu!
+]
+---
+
 class: center, middle
 
 # Let's Open<br/>`RStudio.cloud`
+
+## http://bit.ly/fmh_r
 
 ---
 
@@ -54,12 +146,14 @@ background-size: contain
 
 ---
 
-background-image: url("03_images/hello_world.png")
-background-position: center
-background-size: contain
+.center[
+`ctrl + shift + n` - for new document
+
+![hello_world](03_images/hello_world.png)
+
+]
 
 ---
-
 
 background-image: url("03_images/hello_yall.png")
 background-position: center
@@ -67,18 +161,30 @@ background-size: contain
 
 ---
 
+# Now your turn:
+
+
+## Create a variable and shove some text into it with `<-`
+## Then `print()` that to the screen
+
+---
+
 # Let's play with some data! 
 
 ---
+
 ```{r}
 library(tidyverse)
 ```
+
 ---
+
 ```{r}
 sob_limited_group_1 <- read_csv("01_data/sob_limited_group_1.csv")
 ```
 
 ---
+
 # But what about equals signs?
 ```{r}
 sob_limited_group_1 = read_csv("01_data/sob_limited_group_1.csv")
@@ -87,7 +193,6 @@ sob_limited_group_1 = read_csv("01_data/sob_limited_group_1.csv")
 
 ---
 
----
 # But arrows are directional!
 ```{r}
 read_csv("01_data/sob_limited_group_1.csv") ->
@@ -109,10 +214,65 @@ sob_limited_group_1 %>%
 ```
 
 ---
+
+# wait.. wft is `%>%`?
+
+--
+
+
+![hello_world](03_images/pipe.jpeg)
+
+---
+
+# Why Pipes?
+
+### Traditional Syntax
+```r
+harvest(
+  spray(
+    fertilize(
+      plant( some_acres, crop = "corn", ppa = 38000),
+        n = 10, p = 10, k = 10), 
+    plan = "roundup")
+  )
+```
+-or- 
+```r
+planted_acres <- plant( some_acres, crop = "corn", ppa = 38000)
+fert_planted_acres <- fertilize(planted_acres, 
+                                n = 10, p = 10, k = 10)
+spray_fert_planted_acres <- spray(fert_planted_acres, 
+                                  plan = "roundup")
+harvest(spray_fert_planted_acres)
+```
+
+---
+### Pipe Hotness
+```r
+some_acres %>%
+  plant(crop = "corn", ppa = 38000) %>%
+  fertilize(n=10, p=10, k=10) %>%
+  spray(plan = "roundup") %>%
+  harvest()
+```
+
+---
+
+# Back to the data... 
+
+---
+# Type the data frame name into the console
+
 ```{r}
 sob_limited_group_1
 ```
 ---
+# Time to cheat... `↑↑↓↓←→←→BA`
+```r
+library(skimr)
+```
+
+--
 
 .medium[
 ```{r highlight.output=c(11, 14)}
@@ -121,7 +281,132 @@ skim(sob_limited_group_1)
 
 ```
 ]
+
 ---
+
+# `dplyr` verbs for manipulation
+
+* `filter` - filter rows
+* `select` - filter columns
+* `mutate` - create new columns
+* `group_by` - chunk that junk
+* `summarize` - summery of each chunk
+* `arrange` - sort order
+
+---
+
+# `filter`
+.medium[
+```{r}
+sob_limited_group_1 %>%
+  filter(stAbbr == "IA" & cropName == "CORN") %>%
+  skim
+```
+]
+---
+
+# `filter` supports nested parens
+
+.medium[
+```{r}
+sob_limited_group_1 %>%
+  filter((stAbbr == "IA" & cropName == "CORN") |
+           (stAbbr == "IL" & cropName == "SOYBEANS")) %>%
+  skim
+```
+]
+The secret is: 
+* `&` = and
+* `|` = or
+
+---
+# `select`
+
+.medium[
+```{r}
+sob_limited_group_1 %>%
+  filter((stAbbr == "IA" & cropName == "CORN") |
+           (stAbbr == "IL" & cropName == "SOYBEANS")) %>%
+  select(stAbbr, cropName)
+```
+}
+
+---
+
+sob_limited_group_1 %>%
+  filter((stAbbr == "IA" & cropName == "CORN") |
+           (stAbbr == "IL" & cropName == "SOYBEANS")) %>%
+  group_by(stAbbr, cropName) 
+
+
+sob_limited_group_1 %>%
+  filter((stAbbr == "IA" & cropName == "CORN") |
+           (stAbbr == "IL" & cropName == "SOYBEANS"))   %>%
+  group_by(stAbbr, cropName) %>%
+  summarize(prem = sum(prem))
+
+
+
+sob_limited_group_1 %>%
+  filter((stAbbr == "IA" & cropName == "CORN") |
+           (stAbbr == "IL" & cropName == "SOYBEANS")) %>%
+  group_by(year, stAbbr, cropName) %>%
+  summarize(prem = sum(prem))
+
+
+
+sob_limited_group_1 %>%
+  filter((stAbbr == "IA" & cropName == "CORN") |
+           (stAbbr == "IL" & cropName == "SOYBEANS")) %>%
+  group_by(year, stAbbr, cropName) %>%
+  summarize(prem = sum(prem)) %>%
+  arrange(year, stAbbr)
+
+sob_limited_group_1 %>%
+  filter((stAbbr == "IA" & cropName == "CORN") |
+           (stAbbr == "IL" & cropName == "SOYBEANS")) %>%
+  group_by(year, stAbbr, cropName) %>%
+  summarize(prem = sum(prem)) %>%
+  arrange(stAbbr, year) %>% View
+
+sob_limited_group_1 %>%
+  filter((stAbbr == "IA" & cropName == "CORN") |
+           (stAbbr == "IL" & cropName == "SOYBEANS")) %>%
+  group_by(year, stAbbr, cropName) %>%
+  summarize(prem = sum(prem)) %>%
+  arrange(stAbbr, year) %>% 
+  mutate(state_crop = paste(stAbbr, cropName)) 
+
+
+
+sob_limited_group_1 %>%
+  filter((stAbbr == "IA" & cropName == "CORN") |
+           (stAbbr == "IL" & cropName == "SOYBEANS")) %>%
+  group_by(year, stAbbr, cropName) %>%
+  summarize(prem = sum(prem)) %>%
+  arrange(stAbbr, year) %>% 
+  mutate(state_crop = paste(stAbbr, cropName)) ->
+  two_states_crops
+
+
+## now let's install esquisse 
+install.packages("esquisse")
+library(esquisse)
+
+
+ggplot(two_states_crops) +
+  aes(x = year, y = prem, colour = state_crop) +
+  geom_line(size = 1L) +
+  scale_color_hue() +
+  theme_minimal()
+
+
+
+
+
+
+
+
 
 # remark.js vs xaringan
 

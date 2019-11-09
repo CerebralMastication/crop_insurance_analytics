@@ -10,8 +10,6 @@ sob_limited_group_1 <- read_csv("01_data/sob_limited_group_1.csv")
 sob_limited_group_1
 
 
-## show ctrl click
-
 
 skim(sob_limited_group_1)
 
