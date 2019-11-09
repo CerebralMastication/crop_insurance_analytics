@@ -17,6 +17,17 @@ output:
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 library(skimr)
+hook_source <- knitr::knit_hooks$get('source')
+knitr::knit_hooks$set(
+  source = function(x, options) {
+    x <-
+      stringr::str_replace(x,
+                           "^[[:blank:]]?([^*].+?)[[:blank:]]*#<<[[:blank:]]*$",
+                           "*\\1")
+    hook_source(x, options)
+  }
+)
+
 ```
 
 ```{css, echo = FALSE}
@@ -139,12 +150,12 @@ background-size: contain
 
 ---
 
-
 background-image: url("03_images/dplyr_cheat.png")
 background-position: center
 background-size: contain
 
 ---
+
 class: center, middle
 
 # Let's Open<br/>`RStudio.cloud`
@@ -355,13 +366,14 @@ sob_limited_group_1 %>%
 5 minutes... use your post it notes
 ---
 
-.medium[
+.huge[
 ```{r}
 sob_limited_group_1 %>%
   filter((stAbbr == "IA" | stAbbr == "MN" ) | 
            (cropName == "CORN"))
 ```           
 ]   
+
 ---         
 # Exercise Solution...            
 
@@ -377,8 +389,8 @@ sob_limited_group_1 %>%
 
 ---         
 # `mutate` - create new columns           
-
-.medium[````r
+.medium[
+```r
 dataframe %>%
   mutate( new_column = function(something) )
 ```
@@ -386,16 +398,17 @@ dataframe %>%
 ---
 
 # `mutate` - create new columns           
-
-``{r}, highlight.output=c(5)
+.tiny[
+```{r}
 sob_limited_group_1 %>%
   filter((stAbbr == "IA" | stAbbr == "MN") |
            (cropName == "CORN")) %>%
   select(year, stAbbr, coName, cropName, planAbbr, prem, indem) %>%
-  mutate(state_crop = paste(stAbbr, cropName))
+  mutate(state_crop = paste(stAbbr, cropName)) #<<
 
 ```  
-  
+]
+
   
   
   
