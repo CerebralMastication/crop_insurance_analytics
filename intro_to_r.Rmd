@@ -97,6 +97,11 @@ class: center, middle
 --
 
 ## Easier to Learn / Remember
+
+--
+
+## Sponsored by RStudio
+
 ---
 
 # Tidyverse (core)
@@ -162,6 +167,8 @@ class: center, middle
 
 ## http://bit.ly/fmh_r
 
+Save the project to your workspace. 
+
 ---
 
 background-image: url("03_images/rstudio.cloud.png")
@@ -191,6 +198,8 @@ background-size: contain
 ## Create a variable and shove some text into it with `<-`
 ## Then `print()` that to the screen
 
+
+Save your script now. Update your script with each exercise. These are your notes for later. 
 ---
 
 # Let's play with some data! 
@@ -279,7 +288,8 @@ some_acres %>%
   plant(crop = "corn", ppa = 38000) %>%
   fertilize(n=10, p=10, k=10) %>%
   spray(plan = "roundup") %>%
-  harvest()
+  harvest() ->
+  corn_crop
 ```
 ]
 ---
@@ -334,7 +344,8 @@ skim(sob_limited_group_1)
 
 ---
 
-# `filter` - 
+# `filter` - filter rows
+
 .medium[
 ```{r}
 sob_limited_group_1 %>%
@@ -346,20 +357,20 @@ sob_limited_group_1 %>%
 ---
 
 # `filter` supports nested parens
-.medium[
-```{r}
+
+```{r, eval=FALSE}
 sob_limited_group_1 %>%
   filter((stAbbr == "IA" & cropName == "CORN") |
-           (stAbbr == "IL" & cropName == "SOYBEANS")) %>%
-  skim
+           (stAbbr == "IL" & cropName == "SOYBEANS"))
 ```
-]
+
 The secret is: 
 * `&` = and
 * `|` = or
 
 ---
-# `select`
+
+# `select` - pick columns
 
 .medium[
 ```{r}
@@ -394,7 +405,20 @@ sob_limited_group_1 %>%
   select(year, stAbbr, coName, cropName, planAbbr, prem, indem) 
 
 ```  
+]
 
+---
+# Double check: (bonus verb `distinct`)
+
+```{r}
+
+sob_limited_group_1 %>%
+  filter((stAbbr == "IA" | stAbbr == "MN") |
+           (cropName == "CORN")) %>%
+  distinct(cropName, stAbbr) %>% 
+  arrange( cropName, stAbbr)
+
+```  
 
 ---
 
@@ -415,7 +439,7 @@ dataframe %>%
 ---
 
 # `mutate` - create new columns           
-.tiny[
+
 ```{r}
 sob_limited_group_1 %>%
   filter((stAbbr == "IA" | stAbbr == "MN") |
@@ -427,7 +451,6 @@ sob_limited_group_1 %>%
 
 try it... 
 
-]
 
 ---
 
@@ -435,12 +458,75 @@ try it...
 
 `?paste`
 
-Google: R combine strings
-
 --
+
+Google: R combine strings
 
 ![goog](03_images/google.png)
 
 ---
 
-  
+
+# Bonus: `rename` - guess what it does?
+
+--
+
+```{r}
+
+sob_limited_group_1 %>%
+  select(year, stAbbr, coName, cropName, planAbbr, prem, indem) %>%
+  rename(county_name = coName) #<<
+
+```  
+Notice the argument order...
+
+---
+
+# `group_by` - change the grouping (resolution) of future operations
+
+```{r, highlight.output=c(2)}
+sob_limited_group_1 %>%
+  group_by(year, stAbbr)
+```
+
+---
+# `summarize` - do a group operation on grouped data
+
+```{r}
+sob_limited_group_1 %>%
+  group_by(year, stAbbr) %>%
+  summarize( prem = sum(prem)) ->
+  state_prem
+
+state_prem
+
+```
+Be sure and assign this one to a data frame object. We'll need that in a minute. 
+---
+
+# Cool story, bro... how about a graph?
+.huge[
+
+`↑↑↓↓←→←→BA`
+```{r, eval=FALSE}
+install.packages("esquisse")
+library(esquisse)
+```
+
+/ɛs.kis/
+
+A quick first sketch of an idea.
+
+`esquisse` gets us a fast first draft of a graph. It gives us `ggplot2` code we then customize. 
+]
+---
+
+
+
+---
+
+
+---
+
+
+---
