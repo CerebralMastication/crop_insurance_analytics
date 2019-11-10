@@ -244,13 +244,13 @@ sob_limited_group_1 %>%
 --
 
 
-![hello_world](03_images/pipe.jpeg)
+![pipe](03_images/pipe.jpeg)
 
 ---
 
 # Why Pipes?
 
-### Traditional Syntax
+## Traditional Syntax
 ```r
 harvest(
   spray(
@@ -271,7 +271,9 @@ harvest(spray_fert_planted_acres)
 ```
 
 ---
-### Pipe Hotness
+# Pipe Hotness
+
+.huge[
 ```r
 some_acres %>%
   plant(crop = "corn", ppa = 38000) %>%
@@ -279,6 +281,19 @@ some_acres %>%
   spray(plan = "roundup") %>%
   harvest()
 ```
+]
+---
+  
+# Or in Kentucky
+.huge[
+```r
+bourbon_bottle %>%
+  open(twist=“left”) %>%
+  pour(oz=4) %>%
+  enjoy() ->
+  bad_decisions
+```
+]
 
 ---
 
@@ -359,27 +374,20 @@ sob_limited_group_1 %>%
 # Exercise Time...
 
 1. Take `sob_limited_group_1` and filter it to include all records for IA and MN, and only Corn for the rest of the states. 
-1. keep only the fields `year, stAbbr, coName, cropName, planAbbr, prem, indem`
+1. keep only the following fields:
+`year, stAbbr, coName, cropName, planAbbr, prem, indem`
 
 
 
 5 minutes... use your post it notes
 ---
 
-.huge[
-```{r}
-sob_limited_group_1 %>%
-  filter((stAbbr == "IA" | stAbbr == "MN" ) | 
-           (cropName == "CORN"))
-```           
-]   
-
----         
 # Exercise Solution...            
 
 --
-
+.huge[
 ```{r}
+
 sob_limited_group_1 %>%
   filter((stAbbr == "IA" | stAbbr == "MN") |
            (cropName == "CORN")) %>%
@@ -387,7 +395,15 @@ sob_limited_group_1 %>%
 
 ```  
 
----         
+
+---
+
+background-image: url("03_images/doing.gif")
+background-position: center
+background-size: contain
+
+---
+
 # `mutate` - create new columns           
 .medium[
 ```r
@@ -395,6 +411,7 @@ dataframe %>%
   mutate( new_column = function(something) )
 ```
 ]
+
 ---
 
 # `mutate` - create new columns           
@@ -407,8 +424,23 @@ sob_limited_group_1 %>%
   mutate(state_crop = paste(stAbbr, cropName)) #<<
 
 ```  
+
+try it... 
+
 ]
 
-  
-  
+---
+
+# How to get help?
+
+`?paste`
+
+Google: R combine strings
+
+--
+
+![goog](03_images/google.png)
+
+---
+
   
