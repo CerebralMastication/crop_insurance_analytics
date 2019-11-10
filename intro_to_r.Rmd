@@ -510,7 +510,6 @@ Be sure and assign this one to a data frame object. We'll need that in a minute.
 `↑↑↓↓←→←→BA`
 ```{r, eval=FALSE}
 install.packages("esquisse")
-library(esquisse)
 ```
 
 /ɛs.kis/
@@ -522,11 +521,77 @@ A quick first sketch of an idea.
 ---
 
 
-
----
-
-
----
+background-image: url("03_images/esquisse.png")
+background-position: center
+background-size: contain
 
 
 ---
+
+
+![esquisse1](03_images/es1.png)
+--
+![esquisse2](03_images/es2.png)
+--
+![export](03_images/export.png)
+
+---
+
+# `esquisse` works best (only?) if you have your data aggregated to the unit of display
+
+Generally this is true of `ggplot2` as well. 
+
+---
+
+# Let's talk about "long" vs "wide" data...
+
+### If adding new data never adds columns, then your data is "long"
+
+### Rule of thumb: keep your data long in storage and analysis until you ***really*** need it wide. Like to calculate correlations. 
+
+![export](03_images/l_vs_w.png)
+
+---
+
+# 😕 - `ggplot` likes its data "long"
+
+--
+
+## Excel likes its data wide. 
+
+--
+
+This trips everybody up. 
+
+---
+# So how do we get make it a different shape?
+
+
+## `pivot_wider` or `pivot_longer`
+
+---
+
+# let's `pivot_wider`
+```{r}
+state_prem %>%
+  pivot_wider(names_from = stAbbr, 
+              values_from = prem) ->
+  wide_prem
+wide_prem
+```
+
+---
+# Let's calculate correlations, since we can
+
+```{r}
+wide_prem %>%
+  ungroup() %>% #<<
+  select(-year) %>% #<<
+  cor()
+
+```
+
+---
+
+---
+
