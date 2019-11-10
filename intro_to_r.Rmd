@@ -553,7 +553,7 @@ Generally this is true of `ggplot2` as well.
 
 ---
 
-# 😕 - `ggplot` likes its data "long"
+# 🤔 - `ggplot` likes its data "long"
 
 --
 
@@ -592,6 +592,151 @@ wide_prem %>%
 ```
 
 ---
+# let's reverse it with `pivot_longer`
+
+```{r}
+wide_prem %>%
+  pivot_longer(cols = -year,
+               names_to = "stAbbr",
+               values_to = "prem")
+```
 
 ---
+```{r, eval=FALSE}
+wide_prem %>%
+  pivot_longer(cols = -year,
+               names_to = "stAbbr",
+               values_to = "prem")
+```
+
+## 🤔 - Two "gotchas" 
+
+## 1. What's that `cols` argument? (it's like `select`)
+
+## 2. Must quote the new field names
+
+---
+
+# Excel Pivot Tables do two things:
+
+1. Aggregation
+1. Reshaping 
+
+--
+
+# With R we do those in 2 different steps. 
+
+1. `group_by` and `summarize`  (I'm counting these as one thing...)
+1. `pivot_wider`  or  `pivot_longer`
+
+--
+
+💡 - `pivot_*` are brand spanking new & not in the cheatsheets yet - also not in *R Cookbook*
+
+---
+# Exercise Time! 
+
+yellow Post Its up!
+
+Start with the `sob_limited_group_1` data frame
+
+Calculate combined corn & soy crop loss ratio by year. Loss ratio is `indem/prem`.
+
+use `dplyr`-fu to get your data wrangled. 
+
+Then create a `ggplot` point graph showing the LR by year. 
+
+**BONUS:** Make the points scale with the LR 
+
+15 minutes. 
+
+
+---
+# A Solution
+
+```{r, eval=FALSE}
+
+sob_limited_group_1 %>%
+  filter(cropName %in% c("CORN", "SOYBEANS")) %>% #<<
+  group_by(year) %>%
+  summarize(lr = sum(indem) / sum(prem)) ->
+  lr_year
+
+ggplot(lr_year) +
+  aes(x = year, y = lr, size = lr) +
+  geom_point(colour = "#0c4c8a") +
+ theme_minimal()
+
+```
+
+---
+# A Solution
+
+```{r, echo=FALSE}
+
+sob_limited_group_1 %>%
+  filter(cropName %in% c("CORN", "SOYBEANS")) %>% #<<
+  group_by(year) %>%
+  summarize(lr = sum(indem) / sum(prem)) ->
+  lr_year
+
+ggplot(lr_year) +
+  aes(x = year, y = lr, size = lr) +
+  geom_point(colour = "#0c4c8a") +
+ theme_minimal()
+
+```
+
+---
+
+# Can you make this a bar chart with `esquisse`?
+
+---
+
+
+# Maybe we should do some `ggplot`
+
+```{r, out.height=350, dpi=600}
+
+ggplot(lr_year) +
+  aes(x = year, y = lr, size = lr) +
+  geom_point(colour = "#0c4c8a") +
+  theme_minimal()
+
+```
+---
+
+# that bar plot though...
+
+```{r, out.height=300, dpi=600}
+
+ggplot(lr_year) +
+ aes(x = year, y = lr) +
+ geom_bar(stat="identity") + #<<
+ theme_minimal()
+
+```
+
+*R Graphics Cookbook* https://r-graphics.org/chapter-bar-graph
+
+🤔 - Everybody trips on `stat="identity"`
+
+---
+
+# Learn More!
+
+## *R Cookbook - 2nd ed.* - http://rc2e.com
+
+## *R for Data Science* - https://r4ds.had.co.nz
+
+## *R Graphics Cookbook - 2nd ed.* - https://r-graphics.org
+
+---
+
+# James (JD) Long
+
+## Personal EMail - jdlong@gmail.com
+
+## Twitter: @CMastication
+
 
