@@ -14,3 +14,6 @@ example of how to use R for processing RMA/FCIC public crop insurance data
 `03_images` - Images used in the `intro.r.Rmd` presentation 
 
 ## Notes
+
+Presentation hosted at https://cerebralmastication.github.io/crop_insurance_analytics/
+
