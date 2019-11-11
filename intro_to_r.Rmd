@@ -44,6 +44,13 @@ knitr::knit_hooks$set(
 ```
 
 ---
+
+background-image: url("03_images/disclaimer.png")
+background-position: center
+background-size: contain
+
+---
+
 background-image: url("03_images/rcookbook.png")
 background-position: center
 background-size: contain
