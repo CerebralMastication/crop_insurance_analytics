@@ -7,7 +7,7 @@ cred <- git2r::cred_env("GITHUB_UID", "GITHUB_PAT")
 
 repo <- git2r::init(".")
 
-git2r::pull()
+git2r::pull(credentials = cred)
 
 rmarkdown::render("intro_to_r.Rmd",
                   output_file = "docs/index.html")
@@ -18,4 +18,4 @@ git2r::commit(message = paste(
 ),
 all = TRUE)
 
-git2r::push()
+git2r::push(credentials = cred)
