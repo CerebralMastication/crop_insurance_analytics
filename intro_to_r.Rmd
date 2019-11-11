@@ -783,4 +783,14 @@ ggplot(lr_year) +
 ![notnorm](03_images/notnormal.jpg)
 ---
 
+# Bonus Cheats... `↑↑↓↓←→←→BA`
+
+## Interactive and debugging:
+
+`library(clipr)` - copying R object contents to clipboard
+
+`library(datapasta)` - pasting data into R scripts
+
+---
+
 
