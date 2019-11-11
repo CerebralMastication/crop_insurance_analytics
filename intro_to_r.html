@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Introduction to R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="James (JD) Long" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introduction to R
+## <br/>with the Tidyverse<br/>and RMA SoB data
+### James (JD) Long
+### Renaissance Reinsurance
+### updated: 2019-11-10
+
+---
+
+
+
+
+&lt;style type="text/css"&gt;
+
+.huge .remark-code { /
+  font-size: 150% !important;
+}
+.tiny .remark-code { 
+  font-size: 50% !important;
+}
+.medium .remark-code { 
+  font-size: 75% !important;
+}
+&lt;/style&gt;
+
+---
+background-image: url("03_images/rcookbook.png")
+background-position: center
+background-size: contain
+
+---
+class: center, middle
+# A Little About Me...
+
+---
+
+# Why am I doing this?
+
+## Who's getting paid &amp; how?
+
+---
+class: center, middle
+# Why R? 
+
+--
+
+## Interactive
+
+--
+
+## Widely Used
+
+--
+
+## Data Analysis and Stats First
+
+--
+
+## Great Addon Packages (Tidyverse)
+
+--
+
+---
+
+background-image: url("03_images/stats.jpg")
+background-position: center
+background-size: contain
+
+---
+
+background-image: url("03_images/google_ResearcHers.png")
+background-position: center
+background-size: contain
+
+---
+
+# What's up with the Tidyverse?
+
+--
+
+## Libraries that work well together
+
+--
+
+## Consistent Syntax
+
+--
+
+## Easier to Learn / Remember
+
+--
+
+## Sponsored by RStudio
+
+---
+
+# Tidyverse (core)
+
+.pull-left[
+## 👇 ***Our Focus Today***
+### `dplyr` - data manupliation 
+### `ggplot2` - visualization 
+### `readr` - data import 
+### `tidyr` - data rearrangement (tidy-ing)
+]
+.pull-right[
+### `purrr` - functional programming with lists
+### `tibble` - modern data frames
+### `stringr` - string manipulation
+### `forcats` - categorical data
+]
+
+---
+
+background-image: url("03_images/konami.jpg")
+background-position: center
+background-size: contain
+
+---
+
+# Example Cheats
+
+--
+.pull-left[
+## RStudio Add ins:
+### `clipr` - output to clipboard
+### `datapasta` - paste from clipboard
+### `esquisse` - quick start graphs
+]
+--
+.pull-right[
+## Packages:
+### `Tidyverse` - shared social norms
+### `xlsx` - write to Excel
+
+## Cheat Sheets:
+### In the Help menu!
+]
+
+---
+
+background-image: url("03_images/cheatsheets.png")
+background-position: center
+background-size: contain
+
+---
+
+background-image: url("03_images/dplyr_cheat.png")
+background-position: center
+background-size: contain
+
+---
+
+class: center, middle
+
+# Let's Open&lt;br/&gt;`RStudio.cloud`
+
+## http://bit.ly/fmh_r
+
+Save the project to your workspace. 
+
+---
+
+background-image: url("03_images/rstudio.cloud.png")
+background-position: center
+background-size: contain
+
+---
+
+.center[
+`ctrl + shift + n` - for new document
+
+![hello_world](03_images/hello_world.png)
+
+]
+
+---
+
+background-image: url("03_images/hello_yall.png")
+background-position: center
+background-size: contain
+
+---
+
+# Now your turn:
+
+
+## Create a variable and shove some text into it with `&lt;-`
+## Then `print()` that to the screen
+
+
+Save your script now. Update your script with each exercise. These are your notes for later. 
+---
+
+# Let's play with some data! 
+
+---
+
+
+```r
+library(tidyverse)
+```
+
+```
+## ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✔ ggplot2 3.2.1          ✔ purrr   0.3.3     
+## ✔ tibble  2.1.3          ✔ dplyr   0.8.3.9000
+## ✔ tidyr   1.0.0.9000     ✔ stringr 1.4.0     
+## ✔ readr   1.3.1          ✔ forcats 0.4.0
+```
+
+```
+## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks skimr::filter(), stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
+---
+
+
+```r
+sob_limited_group_1 &lt;- read_csv("01_data/sob_limited_group_1.csv")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   year = col_double(),
+##   stFips = col_double(),
+##   stAbbr = col_character(),
+##   coFips = col_character(),
+##   coName = col_character(),
+##   cropCd = col_character(),
+##   cropName = col_character(),
+##   planCd = col_double(),
+##   planAbbr = col_character(),
+##   coverCat = col_character(),
+##   deliveryType = col_character(),
+##   covLevel = col_double(),
+##   liab = col_double(),
+##   prem = col_double(),
+##   indem = col_double()
+## )
+```
+
+---
+
+# But what about equals signs?
+
+```r
+sob_limited_group_1 = read_csv("01_data/sob_limited_group_1.csv")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   year = col_double(),
+##   stFips = col_double(),
+##   stAbbr = col_character(),
+##   coFips = col_character(),
+##   coName = col_character(),
+##   cropCd = col_character(),
+##   cropName = col_character(),
+##   planCd = col_double(),
+##   planAbbr = col_character(),
+##   coverCat = col_character(),
+##   deliveryType = col_character(),
+##   covLevel = col_double(),
+##   liab = col_double(),
+##   prem = col_double(),
+##   indem = col_double()
+## )
+```
+
+
+---
+
+# But arrows are directional!
+
+```r
+read_csv("01_data/sob_limited_group_1.csv") -&gt;
+  sob_limited_group_1
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   year = col_double(),
+##   stFips = col_double(),
+##   stAbbr = col_character(),
+##   coFips = col_character(),
+##   coName = col_character(),
+##   cropCd = col_character(),
+##   cropName = col_character(),
+##   planCd = col_double(),
+##   planAbbr = col_character(),
+##   coverCat = col_character(),
+##   deliveryType = col_character(),
+##   covLevel = col_double(),
+##   liab = col_double(),
+##   prem = col_double(),
+##   indem = col_double()
+## )
+```
+
+
+---
+
+# Control + Click on a data frame...
+
+```r
+View(sob_limited_group_1)
+```
+
+```r
+sob_limited_group_1 %&gt;%
+   View
+```
+
+---
+
+# wait.. wft is `%&gt;%`?
+
+--
+
+
+![pipe](03_images/pipe.jpeg)
+
+---
+
+# Why Pipes?
+
+## Traditional Syntax
+```r
+harvest(
+  spray(
+    fertilize(
+      plant( some_acres, crop = "corn", ppa = 38000),
+        n = 10, p = 10, k = 10), 
+    plan = "roundup")
+  )
+```
+-or- 
+```r
+planted_acres &lt;- plant( some_acres, crop = "corn", ppa = 38000)
+fert_planted_acres &lt;- fertilize(planted_acres, 
+                                n = 10, p = 10, k = 10)
+spray_fert_planted_acres &lt;- spray(fert_planted_acres, 
+                                  plan = "roundup")
+harvest(spray_fert_planted_acres)
+```
+
+---
+# Pipe Hotness
+
+.huge[
+```r
+some_acres %&gt;%
+  plant(crop = "corn", ppa = 38000) %&gt;%
+  fertilize(n=10, p=10, k=10) %&gt;%
+  spray(plan = "roundup") %&gt;%
+  harvest() -&gt;
+  corn_crop
+```
+]
+---
+  
+# Or in Kentucky
+.huge[
+```r
+bourbon_bottle %&gt;%
+  open(twist=“left”) %&gt;%
+  pour(oz=4) %&gt;%
+  enjoy() -&gt;
+  bad_decisions
+```
+]
+
+---
+
+# Back to the data... 
+
+---
+# Type the data frame name into the console
+
+
+```r
+sob_limited_group_1
+```
+
+```
+## # A tibble: 515,784 x 15
+##     year stFips stAbbr coFips coName cropCd cropName planCd planAbbr
+##    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;   
+##  1  1989     17 IL     000    All O… 0011   WHEAT        90 APH     
+##  2  1989     17 IL     000    All O… 0041   CORN         90 APH     
+##  3  1989     17 IL     000    All O… 0081   SOYBEANS     90 APH     
+##  4  1989     17 IL     001    Adams  0011   WHEAT        90 APH     
+##  5  1989     17 IL     001    Adams  0011   WHEAT        90 APH     
+##  6  1989     17 IL     001    Adams  0011   WHEAT        90 APH     
+##  7  1989     17 IL     001    Adams  0011   WHEAT        90 APH     
+##  8  1989     17 IL     001    Adams  0011   WHEAT        90 APH     
+##  9  1989     17 IL     001    Adams  0011   WHEAT        90 APH     
+## 10  1989     17 IL     001    Adams  0011   WHEAT        90 APH     
+## # … with 515,774 more rows, and 6 more variables: coverCat &lt;chr&gt;,
+## #   deliveryType &lt;chr&gt;, covLevel &lt;dbl&gt;, liab &lt;dbl&gt;, prem &lt;dbl&gt;,
+## #   indem &lt;dbl&gt;
+```
+---
+# Time to cheat... `↑↑↓↓←→←→BA`
+```r
+library(skimr)
+```
+
+--
+
+.medium[
+
+```r
+skim(sob_limited_group_1)
+```
+
+```
+## Skim summary statistics
+##  n obs: 515784 
+##  n variables: 15 
+## 
+## ── Variable type:character ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+##      variable missing complete      n min max empty n_unique
+##        coFips       0   515784 515784   3   3     0      106
+##        coName       0   515784 515784   3  18     0      348
+##      coverCat       0   515784 515784   1   1     0        4
+##        cropCd       0   515784 515784   4   4     0        3
+*##      cropName       0   515784 515784   4   8     0        3
+##  deliveryType       0   515784 515784   4   4     0        4
+##      planAbbr       0   515784 515784   2   9     0       19
+*##        stAbbr       0   515784 515784   2   2     0        5
+## 
+## ── Variable type:numeric ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+##  variable missing complete      n       mean         sd     p0      p25
+##  covLevel       0   515784 515784       0.64       0.21      0     0.55
+##     indem       0   515784 515784   65354.26  554609.46 -37199     0   
+##      liab       0   515784 515784 1282142.29 4608067.69      0 14021   
+##    planCd       0   515784 515784      44.67      36.96      1     3   
+##      prem       0   515784 515784   91599.82  328027.88      0   636   
+##    stFips       0   515784 515784      21.72       5.4      17    17   
+##      year       0   515784 515784    2005.95       7.37   1989  2000   
+##       p50       p75       p100     hist
+##       0.7      0.75    0.95    ▂▁▁▁▅▇▆▃
+##       0     8923       5.9e+07 ▇▁▁▁▁▁▁▁
+##  111937   619887.25    1.6e+08 ▇▁▁▁▁▁▁▁
+##      44       90      90       ▇▁▂▅▁▁▁▇
+##    5763    37327.25    1.1e+07 ▇▁▁▁▁▁▁▁
+##      19       27      31       ▇▃▁▁▁▃▁▃
+##    2006     2012    2018       ▂▃▅▇▇▆▇▇
+```
+]
+
+---
+
+background-image: url("03_images/dplyr_wrangling.png")
+background-position: center
+background-size: contain
+
+
+---
+
+# `dplyr` verbs for manipulation
+
+* `filter` - filter rows
+* `select` - filter columns
+* `mutate` - create new columns
+* `group_by` - chunk that junk
+* `summarize` - summery of each chunk
+* `arrange` - sort order
+
+---
+
+# `filter` - filter rows
+
+.medium[
+
+```r
+sob_limited_group_1 %&gt;%
+  filter(stAbbr == "IA" &amp; cropName == "CORN") %&gt;%
+  skim
+```
+
+```
+## Skim summary statistics
+##  n obs: 52565 
+##  n variables: 15 
+## 
+## ── Variable type:character ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+##      variable missing complete     n min max empty n_unique
+##        coFips       0    52565 52565   3   3     0      101
+##        coName       0    52565 52565   3  18     0      102
+##      coverCat       0    52565 52565   1   1     0        4
+##        cropCd       0    52565 52565   4   4     0        1
+##      cropName       0    52565 52565   4   4     0        1
+##  deliveryType       0    52565 52565   4   4     0        4
+##      planAbbr       0    52565 52565   2   9     0       19
+##        stAbbr       0    52565 52565   2   2     0        1
+## 
+## ── Variable type:numeric ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+##  variable missing complete     n       mean         sd     p0     p25
+##  covLevel       0    52565 52565       0.65       0.21      0     0.6
+##     indem       0    52565 52565  138308.98  960655.68 -13046     0  
+##      liab       0    52565 52565 2483435.47 7394837.63      0 49020  
+##    planCd       0    52565 52565      44.03      36.26      1     3  
+##      prem       0    52565 52565  155798.39  467817.74      0  1490  
+##    stFips       0    52565 52565      19          0        19    19  
+##      year       0    52565 52565    2005.4        7.24   1989  2000  
+##       p50       p75          p100     hist
+##       0.7       0.8       0.95    ▂▁▁▁▃▇▆▃
+##       0     13768         3.7e+07 ▇▁▁▁▁▁▁▁
+##  279569   1434295         1.2e+08 ▇▁▁▁▁▁▁▁
+##      44        90        90       ▇▁▃▅▁▁▁▇
+##   11455     75124   8776695       ▇▁▁▁▁▁▁▁
+##      19        19        19       ▁▁▁▇▁▁▁▁
+##    2006      2011      2018       ▂▃▆▇▇▆▇▆
+```
+]
+
+---
+
+# `filter` supports nested parens
+
+
+```r
+sob_limited_group_1 %&gt;%
+  filter((stAbbr == "IA" &amp; cropName == "CORN") |
+           (stAbbr == "IL" &amp; cropName == "SOYBEANS"))
+```
+
+The secret is: 
+* `&amp;` = and
+* `|` = or
+
+---
+
+# `select` - pick columns
+
+.medium[
+
+```r
+sob_limited_group_1 %&gt;%
+  filter((stAbbr == "IA" &amp; cropName == "CORN") |
+           (stAbbr == "IL" &amp; cropName == "SOYBEANS")) %&gt;%
+  select(stAbbr, cropName)
+```
+
+```
+## # A tibble: 106,406 x 2
+##    stAbbr cropName
+##    &lt;chr&gt;  &lt;chr&gt;   
+##  1 IL     SOYBEANS
+##  2 IL     SOYBEANS
+##  3 IL     SOYBEANS
+##  4 IL     SOYBEANS
+##  5 IL     SOYBEANS
+##  6 IL     SOYBEANS
+##  7 IL     SOYBEANS
+##  8 IL     SOYBEANS
+##  9 IL     SOYBEANS
+## 10 IL     SOYBEANS
+## # … with 106,396 more rows
+```
+]
+
+---
+# Exercise Time...
+
+1. Take `sob_limited_group_1` and filter it to include all records for IA and MN, and only Corn for the rest of the states. 
+1. keep only the following fields:
+`year, stAbbr, coName, cropName, planAbbr, prem, indem`
+
+
+
+5 minutes... use your post it notes
+---
+
+# Exercise Solution...            
+
+--
+.huge[
+
+```r
+sob_limited_group_1 %&gt;%
+  filter((stAbbr == "IA" | stAbbr == "MN") |
+           (cropName == "CORN")) %&gt;%
+  select(year, stAbbr, coName, cropName, planAbbr, prem, indem) 
+```
+
+```
+## # A tibble: 327,105 x 7
+##     year stAbbr coName             cropName planAbbr   prem  indem
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;
+##  1  1989 IL     All Other Counties CORN     APH           0      0
+##  2  1989 IL     Adams              CORN     APH           0      0
+##  3  1989 IL     Adams              CORN     APH         754   1346
+##  4  1989 IL     Adams              CORN     APH       35815  91313
+##  5  1989 IL     Adams              CORN     APH       86661 221857
+##  6  1989 IL     Adams              CORN     APH           0      0
+##  7  1989 IL     Adams              CORN     APH        1556   5136
+##  8  1989 IL     Adams              CORN     APH       93238 252274
+##  9  1989 IL     Adams              CORN     APH      115249 419128
+## 10  1989 IL     Alexander          CORN     APH           0      0
+## # … with 327,095 more rows
+```
+]
+
+---
+# Double check: (bonus verb `distinct`)
+
+
+```r
+sob_limited_group_1 %&gt;%
+  filter((stAbbr == "IA" | stAbbr == "MN") |
+           (cropName == "CORN")) %&gt;%
+  distinct(cropName, stAbbr) %&gt;% 
+  arrange( cropName, stAbbr)
+```
+
+```
+## # A tibble: 9 x 2
+##   cropName stAbbr
+##   &lt;chr&gt;    &lt;chr&gt; 
+## 1 CORN     IA    
+## 2 CORN     IL    
+## 3 CORN     IN    
+## 4 CORN     MN    
+## 5 CORN     NE    
+## 6 SOYBEANS IA    
+## 7 SOYBEANS MN    
+## 8 WHEAT    IA    
+## 9 WHEAT    MN
+```
+
+---
+
+background-image: url("03_images/doing.gif")
+background-position: center
+background-size: contain
+
+---
+
+# `mutate` - create new columns           
+.medium[
+```r
+dataframe %&gt;%
+  mutate( new_column = function(something) )
+```
+]
+
+---
+
+# `mutate` - create new columns           
+
+
+```r
+sob_limited_group_1 %&gt;%
+  filter((stAbbr == "IA" | stAbbr == "MN") |
+           (cropName == "CORN")) %&gt;%
+  select(year, stAbbr, coName, cropName, planAbbr, prem, indem) %&gt;%
+* mutate(state_crop = paste(stAbbr, cropName))
+```
+
+```
+## # A tibble: 327,105 x 8
+##     year stAbbr coName           cropName planAbbr   prem  indem state_crop
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;            &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;     
+##  1  1989 IL     All Other Count… CORN     APH           0      0 IL CORN   
+##  2  1989 IL     Adams            CORN     APH           0      0 IL CORN   
+##  3  1989 IL     Adams            CORN     APH         754   1346 IL CORN   
+##  4  1989 IL     Adams            CORN     APH       35815  91313 IL CORN   
+##  5  1989 IL     Adams            CORN     APH       86661 221857 IL CORN   
+##  6  1989 IL     Adams            CORN     APH           0      0 IL CORN   
+##  7  1989 IL     Adams            CORN     APH        1556   5136 IL CORN   
+##  8  1989 IL     Adams            CORN     APH       93238 252274 IL CORN   
+##  9  1989 IL     Adams            CORN     APH      115249 419128 IL CORN   
+## 10  1989 IL     Alexander        CORN     APH           0      0 IL CORN   
+## # … with 327,095 more rows
+```
+
+try it... 
+
+
+---
+
+# How to get help?
+
+`?paste`
+
+--
+
+Google: R combine strings
+
+![goog](03_images/google.png)
+
+---
+
+
+# Bonus: `rename` - guess what it does?
+
+--
+
+
+```r
+sob_limited_group_1 %&gt;%
+  select(year, stAbbr, coName, cropName, planAbbr, prem, indem) %&gt;%
+* rename(county_name = coName)
+```
+
+```
+## # A tibble: 515,784 x 7
+##     year stAbbr county_name        cropName planAbbr  prem indem
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;
+##  1  1989 IL     All Other Counties WHEAT    APH          0     0
+##  2  1989 IL     All Other Counties CORN     APH          0     0
+##  3  1989 IL     All Other Counties SOYBEANS APH          0     0
+##  4  1989 IL     Adams              WHEAT    APH          0     0
+##  5  1989 IL     Adams              WHEAT    APH         14     0
+##  6  1989 IL     Adams              WHEAT    APH       1551     0
+##  7  1989 IL     Adams              WHEAT    APH       7886   145
+##  8  1989 IL     Adams              WHEAT    APH          0     0
+##  9  1989 IL     Adams              WHEAT    APH       2316     0
+## 10  1989 IL     Adams              WHEAT    APH       4026  2294
+## # … with 515,774 more rows
+```
+Notice the argument order...
+
+---
+
+# `group_by` - change the grouping (resolution) of future operations
+
+
+```r
+sob_limited_group_1 %&gt;%
+  group_by(year, stAbbr)
+```
+
+```
+## # A tibble: 515,784 x 15
+*## # Groups:   year, stAbbr [150]
+##     year stFips stAbbr coFips coName cropCd cropName planCd planAbbr
+##    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;   
+##  1  1989     17 IL     000    All O… 0011   WHEAT        90 APH     
+##  2  1989     17 IL     000    All O… 0041   CORN         90 APH     
+##  3  1989     17 IL     000    All O… 0081   SOYBEANS     90 APH     
+##  4  1989     17 IL     001    Adams  0011   WHEAT        90 APH     
+##  5  1989     17 IL     001    Adams  0011   WHEAT        90 APH     
+##  6  1989     17 IL     001    Adams  0011   WHEAT        90 APH     
+##  7  1989     17 IL     001    Adams  0011   WHEAT        90 APH     
+##  8  1989     17 IL     001    Adams  0011   WHEAT        90 APH     
+##  9  1989     17 IL     001    Adams  0011   WHEAT        90 APH     
+## 10  1989     17 IL     001    Adams  0011   WHEAT        90 APH     
+## # … with 515,774 more rows, and 6 more variables: coverCat &lt;chr&gt;,
+## #   deliveryType &lt;chr&gt;, covLevel &lt;dbl&gt;, liab &lt;dbl&gt;, prem &lt;dbl&gt;,
+## #   indem &lt;dbl&gt;
+```
+
+---
+# `summarize` - do a group operation on grouped data
+
+
+```r
+sob_limited_group_1 %&gt;%
+  group_by(year, stAbbr) %&gt;%
+  summarize( prem = sum(prem)) -&gt;
+  state_prem
+
+state_prem
+```
+
+```
+## # A tibble: 150 x 3
+## # Groups:   year [30]
+##     year stAbbr      prem
+##    &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
+##  1  1989 IA     108576188
+##  2  1989 IL      54787066
+##  3  1989 IN      15942467
+##  4  1989 MN      68654761
+##  5  1989 NE      41626780
+##  6  1990 IA      73309044
+##  7  1990 IL      29600800
+##  8  1990 IN       9413259
+##  9  1990 MN      65679262
+## 10  1990 NE      26652326
+## # … with 140 more rows
+```
+Be sure and assign this one to a data frame object. We'll need that in a minute. 
+---
+
+# Cool story, bro... how about a graph?
+.huge[
+
+`↑↑↓↓←→←→BA`
+
+```r
+install.packages("esquisse")
+```
+
+/ɛs.kis/
+
+A quick first sketch of an idea.
+
+`esquisse` gets us a fast first draft of a graph. It gives us `ggplot2` code we then customize. 
+]
+---
+
+
+background-image: url("03_images/esquisse.png")
+background-position: center
+background-size: contain
+
+
+---
+
+
+&lt;img src="03_images/es1.png" width="600" /&gt;
+
+&lt;img src="03_images/es2.png" width="600" /&gt;
+
+&lt;img src="03_images/export.png" width="250" /&gt;
+
+
+---
+
+# `esquisse` works best (only?) if you have your data aggregated to the unit of display
+
+Generally this is true of `ggplot2` as well. 
+
+---
+
+# Let's talk about "long" vs "wide" data...
+
+### If adding new data never adds columns, then your data is "long"
+
+### Rule of thumb: keep your data long in storage and analysis until you ***really*** need it wide. Like to calculate correlations. 
+
+![export](03_images/l_vs_w.png)
+
+---
+
+# 🤔 - `ggplot` likes its data "long"
+
+--
+
+## Excel likes its data wide. 
+
+--
+
+This trips everybody up. 
+
+---
+# So how do we get make it a different shape?
+
+
+## `pivot_wider`
+## `pivot_longer`
+
+---
+
+# let's `pivot_wider`
+
+```r
+state_prem %&gt;%
+  pivot_wider(names_from = stAbbr, 
+              values_from = prem) -&gt;
+  wide_prem
+wide_prem
+```
+
+```
+## # A tibble: 30 x 6
+## # Groups:   year [30]
+##     year        IA       IL       IN        MN       NE
+##    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+##  1  1989 108576188 54787066 15942467  68654761 41626780
+##  2  1990  73309044 29600800  9413259  65679262 26652326
+##  3  1991  62933287 27266873  9821834  49486953 24415359
+##  4  1992  64959731 41617752 16401088  48087453 33477953
+##  5  1993  59587322 39395926 15837416  46502008 33481087
+##  6  1994  83179160 50483454 18913067  74694566 42347611
+##  7  1995 100568854 76795570 30787110  92850790 61650261
+##  8  1996  70959128 93528285 37081409 118068933 45860721
+##  9  1997 136029770 84687641 38274003 119678510 92084929
+## 10  1998 148390218 93916521 46665391 129245516 99224406
+## # … with 20 more rows
+```
+
+---
+# Let's calculate correlations, since we can
+
+
+```r
+wide_prem %&gt;%
+* ungroup() %&gt;%
+* select(-year) %&gt;%
+  cor()
+```
+
+```
+##           IA        IL        IN        MN        NE
+## IA 1.0000000 0.9916119 0.9956536 0.9967789 0.9974921
+## IL 0.9916119 1.0000000 0.9971414 0.9896964 0.9932751
+## IN 0.9956536 0.9971414 1.0000000 0.9931811 0.9979541
+## MN 0.9967789 0.9896964 0.9931811 1.0000000 0.9950238
+## NE 0.9974921 0.9932751 0.9979541 0.9950238 1.0000000
+```
+
+---
+# let's reverse it with `pivot_longer`
+
+
+```r
+wide_prem %&gt;%
+  pivot_longer(cols = -year,
+               names_to = "stAbbr",
+               values_to = "prem")
+```
+
+```
+## # A tibble: 150 x 3
+## # Groups:   year [30]
+##     year stAbbr      prem
+##    &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
+##  1  1989 IA     108576188
+##  2  1989 IL      54787066
+##  3  1989 IN      15942467
+##  4  1989 MN      68654761
+##  5  1989 NE      41626780
+##  6  1990 IA      73309044
+##  7  1990 IL      29600800
+##  8  1990 IN       9413259
+##  9  1990 MN      65679262
+## 10  1990 NE      26652326
+## # … with 140 more rows
+```
+
+---
+
+```r
+wide_prem %&gt;%
+  pivot_longer(cols = -year,
+               names_to = "stAbbr",
+               values_to = "prem")
+```
+
+## 🤔 - Two "gotchas" 
+
+## 1. What's that `cols` argument? (it's like `select`)
+
+## 2. Must quote the new field names
+
+---
+
+# Excel Pivot Tables do two things:
+
+1. Aggregation
+1. Reshaping 
+
+--
+
+# With R we do those in 2 different steps. 
+
+1. `group_by` and `summarize`  (I'm counting these as one thing...)
+1. `pivot_wider`  or  `pivot_longer`
+
+--
+
+💡 - `pivot_*` are brand spanking new &amp; not in the cheatsheets yet - also not in *R Cookbook*
+
+---
+# Exercise Time! 
+
+yellow Post Its up!
+
+Start with the `sob_limited_group_1` data frame
+
+Calculate combined corn &amp; soy crop loss ratio by year. Loss ratio is `indem/prem`.
+
+use `dplyr`-fu to get your data wrangled. 
+
+Then create a `ggplot` point graph showing the LR by year. 
+
+**BONUS:** Make the points scale with the LR 
+
+15 minutes. 
+
+
+---
+# A Solution
+
+
+```r
+sob_limited_group_1 %&gt;%
+* filter(cropName %in% c("CORN", "SOYBEANS")) %&gt;%
+  group_by(year) %&gt;%
+  summarize(lr = sum(indem) / sum(prem)) -&gt;
+  lr_year
+
+ggplot(lr_year) +
+  aes(x = year, y = lr, size = lr) +
+  geom_point(colour = "#0c4c8a") +
+ theme_minimal()
+```
+
+---
+# A Solution
+
+![](intro_to_r_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+
+---
+
+# Can you make this a bar chart with `esquisse`?
+
+---
+
+
+# Maybe we should do some `ggplot`
+
+![ggplot](03_images/ggplot2_exploratory.png)
+
+
+---
+# `ggplot` 
+
+```r
+ggplot(lr_year) +
+  aes(x = year, y = lr, size = lr) +
+  geom_point(colour = "#0c4c8a") +
+  theme_minimal()
+```
+
+&lt;img src="intro_to_r_files/figure-html/unnamed-chunk-27-1.png" height="350" /&gt;
+---
+
+# that bar plot though...
+
+
+```r
+ggplot(lr_year) +
+ aes(x = year, y = lr) +
+*geom_bar(stat="identity") +
+ theme_minimal()
+```
+
+&lt;img src="intro_to_r_files/figure-html/unnamed-chunk-28-1.png" height="300" /&gt;
+
+*R Graphics Cookbook* https://r-graphics.org/chapter-bar-graph
+
+🤔 - Everybody trips on `stat="identity"`
+
+---
+
+# Learn More!
+
+## *R Cookbook - 2nd ed.* - http://rc2e.com
+
+## *R for Data Science* - https://r4ds.had.co.nz
+
+## *R Graphics Cookbook - 2nd ed.* - https://r-graphics.org
+
+---
+
+# James (JD) Long
+
+## Personal EMail - jdlong@gmail.com
+
+## Twitter: @CMastication
+
+---
+
+# Artwork by @allison_horst
+
+![notnorm](03_images/notnormal.jpg)
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -80,7 +80,17 @@ class: center, middle
 
 --
 
+---
 
+background-image: url("03_images/stats.jpg")
+background-position: center
+background-size: contain
+
+---
+
+background-image: url("03_images/google_ResearcHers.png")
+background-position: center
+background-size: contain
 
 ---
 
@@ -333,6 +343,13 @@ skim(sob_limited_group_1)
 
 ---
 
+background-image: url("03_images/dplyr_wrangling.png")
+background-position: center
+background-size: contain
+
+
+---
+
 # `dplyr` verbs for manipulation
 
 * `filter` - filter rows
@@ -529,11 +546,18 @@ background-size: contain
 ---
 
 
-![esquisse1](03_images/es1.png)
---
-![esquisse2](03_images/es2.png)
---
-![export](03_images/export.png)
+```{r echo=FALSE, out.width=600}
+knitr::include_graphics("03_images/es1.png")
+```
+
+```{r, echo=FALSE, out.width=600}
+knitr::include_graphics("03_images/es2.png")
+```
+
+```{r, echo=FALSE, out.width=250}
+knitr::include_graphics("03_images/export.png")
+```
+
 
 ---
 
@@ -567,7 +591,8 @@ This trips everybody up.
 # So how do we get make it a different shape?
 
 
-## `pivot_wider` or `pivot_longer`
+## `pivot_wider`
+## `pivot_longer`
 
 ---
 
@@ -696,6 +721,11 @@ ggplot(lr_year) +
 
 # Maybe we should do some `ggplot`
 
+![ggplot](03_images/ggplot2_exploratory.png)
+
+
+---
+# `ggplot` 
 ```{r, out.height=350, dpi=600}
 
 ggplot(lr_year) +
@@ -738,5 +768,12 @@ ggplot(lr_year) +
 ## Personal EMail - jdlong@gmail.com
 
 ## Twitter: @CMastication
+
+---
+
+# Artwork by @allison_horst
+
+![notnorm](03_images/notnormal.jpg)
+---
 
 
