@@ -2,6 +2,9 @@
 
 Sys.setenv(RSTUDIO_PANDOC = "/Applications/RStudio.app/Contents/MacOS/pandoc")
 
+
+cred <- git2r::cred_env("GITHUB_UID", "GITHUB_PAT")
+
 repo <- git2r::init(".")
 
 git2r::pull()
