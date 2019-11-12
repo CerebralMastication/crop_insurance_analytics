@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 ## <br/>with the Tidyverse<br/>and RMA SoB data
 ### James (JD) Long
 ### Renaissance Reinsurance
-### updated: 2019-11-10
+### updated: 2019-11-12
 
 ---
 
@@ -221,7 +221,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ───────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -232,7 +232,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ──────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks skimr::filter(), stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -447,7 +447,7 @@ skim(sob_limited_group_1)
 ##  n obs: 515784 
 ##  n variables: 15 
 ## 
-## ── Variable type:character ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Variable type:character ───────────────────────────────────────────────────────────────────────────────────────────
 ##      variable missing complete      n min max empty n_unique
 ##        coFips       0   515784 515784   3   3     0      106
 ##        coName       0   515784 515784   3  18     0      348
@@ -458,7 +458,7 @@ skim(sob_limited_group_1)
 ##      planAbbr       0   515784 515784   2   9     0       19
 *##        stAbbr       0   515784 515784   2   2     0        5
 ## 
-## ── Variable type:numeric ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Variable type:numeric ─────────────────────────────────────────────────────────────────────────────────────────────
 ##  variable missing complete      n       mean         sd     p0      p25
 ##  covLevel       0   515784 515784       0.64       0.21      0     0.55
 ##     indem       0   515784 515784   65354.26  554609.46 -37199     0   
@@ -513,7 +513,7 @@ sob_limited_group_1 %&gt;%
 ##  n obs: 52565 
 ##  n variables: 15 
 ## 
-## ── Variable type:character ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Variable type:character ───────────────────────────────────────────────────────────────────────────────────────────
 ##      variable missing complete     n min max empty n_unique
 ##        coFips       0    52565 52565   3   3     0      101
 ##        coName       0    52565 52565   3  18     0      102
@@ -524,7 +524,7 @@ sob_limited_group_1 %&gt;%
 ##      planAbbr       0    52565 52565   2   9     0       19
 ##        stAbbr       0    52565 52565   2   2     0        1
 ## 
-## ── Variable type:numeric ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Variable type:numeric ─────────────────────────────────────────────────────────────────────────────────────────────
 ##  variable missing complete     n       mean         sd     p0     p25
 ##  covLevel       0    52565 52565       0.65       0.21      0     0.6
 ##     indem       0    52565 52565  138308.98  960655.68 -13046     0  
@@ -1078,6 +1078,439 @@ ggplot(lr_year) +
 
 ---
 
+# Joining data
+
+## Very much like SQL joins (with better defaults)
+
+### `inner_join` - only the matching data from both tables 
+### `full_join` - all data from both tables
+### `left_join` - all data from the left, and the matches from the right
+### `right_join` - all data from the right, and the matches from the left
+
+---
+# Excel `vlookup` ...
+
+## Imagine your starting table in Excel as your ***left*** table. Then a `vlookup` is like a `left_join`
+
+## There is no `vlookup` that's like `full` or `inner` join
+
+---
+
+### `inner_join`
+
+
+![inner_ven](03_images/inner_v.png)
+![inner_cheat](03_images/inner.png)
+
+---
+
+### `full_join`
+
+
+![inner_ven](03_images/full_v.png)
+![inner_cheat](03_images/full.png)
+
+---
+
+### `left_join`
+
+
+![inner_ven](03_images/left_v.png)
+![inner_cheat](03_images/left.png)
+
+
+---
+
+### `right_join`
+
+
+![inner_ven](03_images/right_v.png)
+![inner_cheat](03_images/right.png)
+
+---
+# Inner Join Example
+
+
+```r
+sob_limited_group_1 %&gt;%
+* group_by(year, stAbbr, cropName) %&gt;%
+  summarize(st_crop_yr_prem = sum(prem)) -&gt;
+  st_crop_yr_prem
+
+sob_limited_group_1 %&gt;%
+* group_by(year, stAbbr, cropName, coName) %&gt;%
+  summarize(st_crop_yr_co_prem = sum(prem)) -&gt;
+  st_crop_yr_co_prem
+```
+
+---
+
+.tiny[
+
+```r
+st_crop_yr_co_prem %&gt;%
+  left_join(st_crop_yr_prem) 
+```
+
+
+```r
+st_crop_yr_co_prem %&gt;%
+  left_join(st_crop_yr_prem, by = c("year", "stAbbr", "cropName")) 
+```
+
+```
+## # A tibble: 37,402 x 6
+## # Groups:   year, stAbbr, cropName [450]
+##     year stAbbr cropName coName           st_crop_yr_co_pr… st_crop_yr_prem
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;                        &lt;dbl&gt;           &lt;dbl&gt;
+##  1  1989 IA     CORN     Adair                       726849        77710025
+##  2  1989 IA     CORN     Adams                       500489        77710025
+##  3  1989 IA     CORN     All Other Count…                 0        77710025
+##  4  1989 IA     CORN     Allamakee                   515355        77710025
+##  5  1989 IA     CORN     Appanoose                   278855        77710025
+##  6  1989 IA     CORN     Audubon                     780587        77710025
+##  7  1989 IA     CORN     Benton                      977636        77710025
+##  8  1989 IA     CORN     Black Hawk                  835145        77710025
+##  9  1989 IA     CORN     Boone                      1013970        77710025
+## 10  1989 IA     CORN     Bremer                      706015        77710025
+## # … with 37,392 more rows
+```
+
+]
+
+
+---
+
+# joins with missing values
+
+
+```r
+st_crop_yr_co_prem_missing &lt;- 
+  read_csv("01_data/st_crop_yr_co_prem_missing.csv")
+```
+
+Now we have `st_crop_yr_co_prem` and `st_crop_yr_co_prem_missing` which is the same but with 1000 random records missing (rows totally deleted)
+
+How can we use joins to create a data frame of *only* the combinations of `year, stAbbr, cropName, coName` that are missing from `st_crop_yr_co_prem_missing`?
+
+Post its up! Work in small groups. 
+
+Hints:
+
+* First step is to `ungroup()`
+* Be explicit about your join `by = c('var1', 'var2')`
+* notice what `dplyr` does if there's a column name clash
+* Run results through `skim` for sanity check
+* to filter on missing values, look at `?is.na`
+
+---
+# One Solution
+
+.tiny[
+
+```r
+st_crop_yr_co_prem %&gt;%
+  ungroup() %&gt;%
+  left_join(st_crop_yr_co_prem_missing,
+            by = c("year", "stAbbr", "cropName", "coName")) %&gt;%
+  skim
+```
+
+```
+## Skim summary statistics
+##  n obs: 37402 
+##  n variables: 6 
+## 
+## ── Variable type:character ───────────────────────────────────────────────────────────────────────────────────────────
+##  variable missing complete     n min max empty n_unique
+##    coName       0    37402 37402   3  18     0      348
+##  cropName       0    37402 37402   4   8     0        3
+##    stAbbr       0    37402 37402   2   2     0        5
+## 
+## ── Variable type:numeric ─────────────────────────────────────────────────────────────────────────────────────────────
+##              variable missing complete     n       mean         sd   p0
+##  st_crop_yr_co_prem.x       0    37402 37402 1263187.05 1907662.21    0
+##  st_crop_yr_co_prem.y    1000    36402 37402 1264965.39 1909977.5     0
+##                  year       0    37402 37402    2003.92       8.51 1989
+##       p25      p50        p75       p100     hist
+##  58488    443933   1700028       1.8e+07 ▇▁▁▁▁▁▁▁
+##  58203.25 444675.5 1701297.75    1.8e+07 ▇▁▁▁▁▁▁▁
+##   1997      2004      2011    2018       ▆▇▆▇▇▆▇▇
+```
+]
+
+---
+
+# One Solution cont...
+
+.tiny[
+
+```r
+st_crop_yr_co_prem %&gt;%
+  left_join(st_crop_yr_co_prem_missing,
+            by = c("year", "stAbbr", "cropName", "coName")) %&gt;%
+  filter(is.na(st_crop_yr_co_prem.y))
+```
+
+```
+## # A tibble: 1,000 x 6
+## # Groups:   year, stAbbr, cropName [386]
+##     year stAbbr cropName coName     st_crop_yr_co_prem… st_crop_yr_co_prem…
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;                    &lt;dbl&gt;               &lt;dbl&gt;
+##  1  1989 IA     CORN     Cass                    848037                  NA
+##  2  1989 IA     CORN     Davis                   304956                  NA
+##  3  1989 IA     CORN     Washington              922814                  NA
+##  4  1989 IA     CORN     Wright                  697579                  NA
+##  5  1989 IA     SOYBEANS Adams                   255968                  NA
+##  6  1989 IA     SOYBEANS Humboldt                380926                  NA
+##  7  1989 IA     SOYBEANS Jones                   206454                  NA
+##  8  1989 IL     CORN     Calhoun                  34518                  NA
+##  9  1989 IL     CORN     Champaign               532659                  NA
+## 10  1989 IL     CORN     Schuyler                158629                  NA
+## # … with 990 more rows
+```
+]
+
+---
+
+# Logical Branching
+
+## the `dplyr` approach is the function
+
+
+`case_when()`
+
+
+## typically used along with a `mutate`
+
+```r
+mutate( new_column = case_when(condition ~ result, 
+                               condition2 ~ result2, 
+                               condition3 ~ result2,
+                               TRUE ~ else_result) )
+```
+First `TRUE` condition is the result
+---
+
+# Logical Branching
+
+
+```r
+st_crop_yr_co_prem %&gt;%
+  mutate(size = case_when(st_crop_yr_co_prem &gt;= 1000000 ~ "MM+", 
+                           TRUE ~ "&lt; MM"))
+```
+
+```
+## # A tibble: 37,402 x 6
+## # Groups:   year, stAbbr, cropName [450]
+##     year stAbbr cropName coName             st_crop_yr_co_prem size 
+##    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;                           &lt;dbl&gt; &lt;chr&gt;
+##  1  1989 IA     CORN     Adair                          726849 &lt; MM 
+##  2  1989 IA     CORN     Adams                          500489 &lt; MM 
+##  3  1989 IA     CORN     All Other Counties                  0 &lt; MM 
+##  4  1989 IA     CORN     Allamakee                      515355 &lt; MM 
+##  5  1989 IA     CORN     Appanoose                      278855 &lt; MM 
+##  6  1989 IA     CORN     Audubon                        780587 &lt; MM 
+##  7  1989 IA     CORN     Benton                         977636 &lt; MM 
+##  8  1989 IA     CORN     Black Hawk                     835145 &lt; MM 
+##  9  1989 IA     CORN     Boone                         1013970 MM+  
+## 10  1989 IA     CORN     Bremer                         706015 &lt; MM 
+## # … with 37,392 more rows
+```
+
+---
+# Logical Branching
+
+In "plinko" we need multiple conditions... use multiple pipe steps
+
+.tiny[
+
+```r
+st_crop_yr_co_prem %&gt;%
+  mutate(size = case_when(st_crop_yr_co_prem &gt;= 1000000 ~ "MM+",
+                          TRUE ~ "&lt; MM")) %&gt;%
+  mutate(size = case_when(st_crop_yr_co_prem &gt;= 1000000 &amp;
+                            stAbbr == "IA" ~ "MM+ in IA")) -&gt; 
+  branch_example
+
+branch_example %&gt;%
+  filter(st_crop_yr_co_prem &gt;= 1000000) %&gt;%
+  head
+```
+
+```
+## # A tibble: 6 x 6
+## # Groups:   year, stAbbr, cropName [1]
+##    year stAbbr cropName coName   st_crop_yr_co_prem size     
+##   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;                 &lt;dbl&gt; &lt;chr&gt;    
+## 1  1989 IA     CORN     Boone               1013970 MM+ in IA
+## 2  1989 IA     CORN     Buchanan            1162181 MM+ in IA
+## 3  1989 IA     CORN     Cedar               1129430 MM+ in IA
+## 4  1989 IA     CORN     Clayton             1184118 MM+ in IA
+## 5  1989 IA     CORN     Clinton             1498374 MM+ in IA
+## 6  1989 IA     CORN     Crawford            1230931 MM+ in IA
+```
+
+```r
+branch_example %&gt;%
+  filter(st_crop_yr_co_prem &gt;= 1000000) %&gt;%
+  tail
+```
+
+```
+## # A tibble: 6 x 6
+## # Groups:   year, stAbbr, cropName [1]
+##    year stAbbr cropName coName    st_crop_yr_co_prem size 
+##   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt;
+## 1  2018 NE     WHEAT    Box Butte            1644991 &lt;NA&gt; 
+## 2  2018 NE     WHEAT    Cheyenne             2843502 &lt;NA&gt; 
+## 3  2018 NE     WHEAT    Deuel                1133503 &lt;NA&gt; 
+## 4  2018 NE     WHEAT    Hitchcock            1172246 &lt;NA&gt; 
+## 5  2018 NE     WHEAT    Kimball              1168454 &lt;NA&gt; 
+## 6  2018 NE     WHEAT    Perkins              1463128 &lt;NA&gt;
+```
+]
+---
+# Logical Branching FIXED! 
+
+
+```r
+st_crop_yr_co_prem %&gt;%
+  mutate(size = case_when(st_crop_yr_co_prem &gt;= 1000000 ~ "MM+",
+                          TRUE ~ "&lt; MM")) %&gt;%
+  mutate(size = case_when(st_crop_yr_co_prem &gt;= 1000000 &amp;
+                            stAbbr == "IA" ~ "MM+ in IA", 
+*                         TRUE ~ size)) -&gt;
+  branch_example
+branch_example %&gt;%
+  filter(st_crop_yr_co_prem &gt;= 1000000) %&gt;%
+  tail
+```
+
+```
+## # A tibble: 6 x 6
+## # Groups:   year, stAbbr, cropName [1]
+##    year stAbbr cropName coName    st_crop_yr_co_prem size 
+##   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt;
+## 1  2018 NE     WHEAT    Box Butte            1644991 MM+  
+## 2  2018 NE     WHEAT    Cheyenne             2843502 MM+  
+## 3  2018 NE     WHEAT    Deuel                1133503 MM+  
+## 4  2018 NE     WHEAT    Hitchcock            1172246 MM+  
+## 5  2018 NE     WHEAT    Kimball              1168454 MM+  
+## 6  2018 NE     WHEAT    Perkins              1463128 MM+
+```
+
+---
+# Branching Exercise
+
+Let's make a scoring "plinko"! Creaate a new column called `score` and use the following rules. You'll need multiple `caase_when` steps. Don't forget your `else` condition at the end of each one. Or you'll get an `NA`. Remember to use `==`. And ***add*** your change to the score to your existing score.
+
+Rules:
+
+* score starts at 0
+* If it's IA Corn then add 1
+* If it's MN Wheat then subtract 2
+* If it's NE add 3
+* If it's Soybeans subtract 1
+
+---
+
+# possible solution...
+
+
+
+```r
+st_crop_yr_co_prem %&gt;%
+  mutate(score = 0) %&gt;% 
+  mutate(score = case_when( stAbbr == "IA" &amp; cropName == "CORN" ~ score + 1 , 
+                            TRUE ~ score) ) %&gt;%
+  mutate(score = case_when( stAbbr == "MN" &amp; cropName == "WHEAT" ~ score - 2  , 
+                            TRUE ~ score) ) %&gt;%
+  mutate(score = case_when( stAbbr == "NE"                       ~ score + 3  , 
+                            TRUE ~ score) ) %&gt;%
+  mutate(score = case_when( cropName == "SOYBEANS"               ~ score - 1  , 
+                            TRUE ~ score) ) -&gt;
+  solution_df
+  
+solution_df %&gt;%
+  ungroup() %&gt;%
+  summarize(score = sum(score))
+```
+
+```
+## # A tibble: 1 x 1
+##   score
+##   &lt;dbl&gt;
+## 1  6425
+```
+
+---
+# Plinko Warning...
+
+## Using a table and a join is more maintainable
+
+---
+# Export to fixed width
+
+`readr` package is the fast tidyvere way to read/write data: `readr::write_*`
+
+However...
+
+![readr](03_images/readr.png)
+
+---
+
+# Export to fixed width
+
+so I googled...
+
+![readr](03_images/write.fwf.png)
+
+Let's try it! 
+
+`install.packages("gdata")`
+
+---
+# gdata::write.fwf
+
+
+```r
+library(gdata)
+
+head(st_crop_yr_prem) 
+```
+
+```
+## # A tibble: 6 x 4
+## # Groups:   year, stAbbr [2]
+##    year stAbbr cropName st_crop_yr_prem
+##   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;              &lt;dbl&gt;
+## 1  1989 IA     CORN            77710025
+## 2  1989 IA     SOYBEANS        30831701
+## 3  1989 IA     WHEAT              34462
+## 4  1989 IL     CORN            36394094
+## 5  1989 IL     SOYBEANS        17758248
+## 6  1989 IL     WHEAT             634724
+```
+
+```r
+st_crop_yr_prem %&gt;%  
+  as.data.frame() %&gt;% # &lt;&lt;
+  write.fwf(file = "test.fwf",
+            colnames = FALSE,
+            width = c(4, 2, 25, 15))
+```
+---
+
+# Reading and writing from Excel
+
+https://rc2e.com/inputandoutput#recipe-readexcel
+
+https://rc2e.com/inputandoutput#recipe-writeexcel
+
+---
+
 # Learn More!
 
 ## *R Cookbook - 2nd ed.* - http://rc2e.com
@@ -1099,6 +1532,16 @@ ggplot(lr_year) +
 # Artwork by @allison_horst
 
 ![notnorm](03_images/notnormal.jpg)
+---
+
+# Bonus Cheats... `↑↑↓↓←→←→BA`
+
+## Interactive and debugging:
+
+`library(clipr)` - copying R object contents to clipboard
+
+`library(datapasta)` - pasting data into R scripts
+
 ---
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

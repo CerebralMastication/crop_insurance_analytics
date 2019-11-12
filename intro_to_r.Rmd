@@ -760,6 +760,299 @@ ggplot(lr_year) +
 
 ---
 
+# Joining data
+
+## Very much like SQL joins (with better defaults)
+
+### `inner_join` - only the matching data from both tables 
+### `full_join` - all data from both tables
+### `left_join` - all data from the left, and the matches from the right
+### `right_join` - all data from the right, and the matches from the left
+
+---
+# Excel `vlookup` ...
+
+## Imagine your starting table in Excel as your ***left*** table. Then a `vlookup` is like a `left_join`
+
+## There is no `vlookup` that's like `full` or `inner` join
+
+---
+
+### `inner_join`
+
+
+![inner_ven](03_images/inner_v.png)
+![inner_cheat](03_images/inner.png)
+
+---
+
+### `full_join`
+
+
+![inner_ven](03_images/full_v.png)
+![inner_cheat](03_images/full.png)
+
+---
+
+### `left_join`
+
+
+![inner_ven](03_images/left_v.png)
+![inner_cheat](03_images/left.png)
+
+
+---
+
+### `right_join`
+
+
+![inner_ven](03_images/right_v.png)
+![inner_cheat](03_images/right.png)
+
+---
+# Inner Join Example
+
+```{r}
+sob_limited_group_1 %>%
+  group_by(year, stAbbr, cropName) %>% #<<
+  summarize(st_crop_yr_prem = sum(prem)) ->
+  st_crop_yr_prem
+
+sob_limited_group_1 %>%
+  group_by(year, stAbbr, cropName, coName) %>% #<<
+  summarize(st_crop_yr_co_prem = sum(prem)) ->
+  st_crop_yr_co_prem
+  
+```
+
+---
+
+.tiny[
+```{r, eval=FALSE}
+st_crop_yr_co_prem %>%
+  left_join(st_crop_yr_prem) 
+```
+
+```{r}
+st_crop_yr_co_prem %>%
+  left_join(st_crop_yr_prem, by = c("year", "stAbbr", "cropName")) 
+```
+
+]
+
+
+---
+
+# joins with missing values
+
+```{r message=FALSE, warning=FALSE}
+st_crop_yr_co_prem_missing <- 
+  read_csv("01_data/st_crop_yr_co_prem_missing.csv")
+```
+
+Now we have `st_crop_yr_co_prem` and `st_crop_yr_co_prem_missing` which is the same but with 1000 random records missing (rows totally deleted)
+
+How can we use joins to create a data frame of *only* the combinations of `year, stAbbr, cropName, coName` that are missing from `st_crop_yr_co_prem_missing`?
+
+Post its up! Work in small groups. 
+
+Hints:
+
+* First step is to `ungroup()`
+* Be explicit about your join `by = c('var1', 'var2')`
+* notice what `dplyr` does if there's a column name clash
+* Run results through `skim` for sanity check
+* to filter on missing values, look at `?is.na`
+
+---
+# One Solution
+
+.tiny[
+```{r}
+st_crop_yr_co_prem %>%
+  ungroup() %>%
+  left_join(st_crop_yr_co_prem_missing,
+            by = c("year", "stAbbr", "cropName", "coName")) %>%
+  skim
+```
+]
+
+---
+
+# One Solution cont...
+
+.tiny[
+```{r}
+st_crop_yr_co_prem %>%
+  left_join(st_crop_yr_co_prem_missing,
+            by = c("year", "stAbbr", "cropName", "coName")) %>%
+  filter(is.na(st_crop_yr_co_prem.y))
+```
+]
+
+---
+
+# Logical Branching
+
+## the `dplyr` approach is the function
+
+
+`case_when()`
+
+
+## typically used along with a `mutate`
+
+```r
+mutate( new_column = case_when(condition ~ result, 
+                               condition2 ~ result2, 
+                               condition3 ~ result2,
+                               TRUE ~ else_result) )
+```
+First `TRUE` condition is the result
+---
+
+# Logical Branching
+
+```{r}
+
+st_crop_yr_co_prem %>%
+  mutate(size = case_when(st_crop_yr_co_prem >= 1000000 ~ "MM+", 
+                           TRUE ~ "< MM"))
+
+```
+
+---
+# Logical Branching
+
+In "plinko" we need multiple conditions... use multiple pipe steps
+
+.tiny[
+```{r}
+
+st_crop_yr_co_prem %>%
+  mutate(size = case_when(st_crop_yr_co_prem >= 1000000 ~ "MM+",
+                          TRUE ~ "< MM")) %>%
+  mutate(size = case_when(st_crop_yr_co_prem >= 1000000 &
+                            stAbbr == "IA" ~ "MM+ in IA")) -> 
+  branch_example
+
+branch_example %>%
+  filter(st_crop_yr_co_prem >= 1000000) %>%
+  head
+
+branch_example %>%
+  filter(st_crop_yr_co_prem >= 1000000) %>%
+  tail
+
+```
+]
+---
+# Logical Branching FIXED! 
+
+```{r}
+
+st_crop_yr_co_prem %>%
+  mutate(size = case_when(st_crop_yr_co_prem >= 1000000 ~ "MM+",
+                          TRUE ~ "< MM")) %>%
+  mutate(size = case_when(st_crop_yr_co_prem >= 1000000 &
+                            stAbbr == "IA" ~ "MM+ in IA", 
+                          TRUE ~ size)) -> #<<
+  branch_example
+branch_example %>%
+  filter(st_crop_yr_co_prem >= 1000000) %>%
+  tail
+
+```
+
+---
+# Branching Exercise
+
+Let's make a scoring "plinko"! Creaate a new column called `score` and use the following rules. You'll need multiple `caase_when` steps. Don't forget your `else` condition at the end of each one. Or you'll get an `NA`. Remember to use `==`. And ***add*** your change to the score to your existing score.
+
+Rules:
+
+* score starts at 0
+* If it's IA Corn then add 1
+* If it's MN Wheat then subtract 2
+* If it's NE add 3
+* If it's Soybeans subtract 1
+
+---
+
+# possible solution...
+
+
+```{r}
+
+st_crop_yr_co_prem %>%
+  mutate(score = 0) %>% 
+  mutate(score = case_when( stAbbr == "IA" & cropName == "CORN" ~ score + 1 , 
+                            TRUE ~ score) ) %>%
+  mutate(score = case_when( stAbbr == "MN" & cropName == "WHEAT" ~ score - 2  , 
+                            TRUE ~ score) ) %>%
+  mutate(score = case_when( stAbbr == "NE"                       ~ score + 3  , 
+                            TRUE ~ score) ) %>%
+  mutate(score = case_when( cropName == "SOYBEANS"               ~ score - 1  , 
+                            TRUE ~ score) ) ->
+  solution_df
+  
+solution_df %>%
+  ungroup() %>%
+  summarize(score = sum(score))
+
+```
+
+---
+# Plinko Warning...
+
+## Using a table and a join is more maintainable
+
+---
+# Export to fixed width
+
+`readr` package is the fast tidyvere way to read/write data: `readr::write_*`
+
+However...
+
+![readr](03_images/readr.png)
+
+---
+
+# Export to fixed width
+
+so I googled...
+
+![readr](03_images/write.fwf.png)
+
+Let's try it! 
+
+`install.packages("gdata")`
+
+---
+# gdata::write.fwf
+
+```{r message=FALSE, warning=FALSE}
+library(gdata)
+
+head(st_crop_yr_prem) 
+
+st_crop_yr_prem %>%  
+  as.data.frame() %>% # <<
+  write.fwf(file = "test.fwf",
+            colnames = FALSE,
+            width = c(4, 2, 25, 15))
+
+```
+---
+
+# Reading and writing from Excel
+
+https://rc2e.com/inputandoutput#recipe-readexcel
+
+https://rc2e.com/inputandoutput#recipe-writeexcel
+
+---
+
 # Learn More!
 
 ## *R Cookbook - 2nd ed.* - http://rc2e.com

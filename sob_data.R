@@ -148,7 +148,30 @@ sob %>%
   sob_limited_group_1
 
 
-write_csv(sob_limited_group_1, "data/sob_limited_group_1.csv")
 
+write_csv(sob_limited_group_1, "01_data/sob_limited_group_1.csv")
 
+sob_limited_group_1 %>%
+  group_by(year, stAbbr, cropName, coName) %>% #<<
+  summarize(st_crop_yr_co_prem = sum(prem)) ->
+  st_crop_yr_co_prem
 
+# randomly pick 100 rows
+set.seed(42)
+sample_rows <- sample(1:nrow(st_crop_yr_co_prem), 1000)
+
+# put NA for prem for the sample row
+st_crop_yr_co_prem %>%
+  ungroup %>%
+  mutate(row = row_number()) %>%
+  filter(! row %in% sample_rows) %>%
+  select(-row) ->
+  st_crop_yr_co_prem_missing
+
+write_csv(st_crop_yr_co_prem_missing,
+          "01_data/st_crop_yr_co_prem_missing.csv")
+
+# 
+# mutate(st_crop_yr_co_prem = case_when(row %in% sample_rows ~ NA_real_ ,
+#                                       TRUE ~ st_crop_yr_co_prem)) ->
+#   
