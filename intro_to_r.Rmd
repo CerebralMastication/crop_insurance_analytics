@@ -967,7 +967,7 @@ branch_example %>%
 ---
 # Branching Exercise
 
-Let's make a scoring "plinko"! Creaate a new column called `score` and use the following rules. You'll need multiple `caase_when` steps. Don't forget your `else` condition at the end of each one. Or you'll get an `NA`. Remember to use `==`. And ***add*** your change to the score to your existing score.
+Let's make a scoring "plinko"! Create a new column called `score` and use the following rules. You'll need multiple `caase_when` steps. Don't forget your `else` condition at the end of each one. Or you'll get an `NA`. Remember to use `==`. And ***add*** your change to the score to your existing score.
 
 Rules:
 
