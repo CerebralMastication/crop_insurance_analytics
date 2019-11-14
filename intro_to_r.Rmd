@@ -182,7 +182,7 @@ class: center, middle
 
 # Let's Open<br/>`RStudio.cloud`
 
-## http://bit.ly/fcropinsr
+## http://bit.ly/cropins_r
 
 Save the project to your workspace. 
 
@@ -981,6 +981,7 @@ Rules:
 
 # possible solution...
 
+.tiny[
 
 ```{r}
 
@@ -995,13 +996,13 @@ st_crop_yr_co_prem %>%
   mutate(score = case_when( cropName == "SOYBEANS"               ~ score - 1  , 
                             TRUE ~ score) ) ->
   solution_df
-  
+
 solution_df %>%
   ungroup() %>%
   summarize(score = sum(score))
 
 ```
-
+]
 ---
 # Plinko Warning...
 
@@ -1038,8 +1039,9 @@ head(st_crop_yr_prem)
 
 st_crop_yr_prem %>%  
   as.data.frame() %>% # <<
-  write.fwf(file = "test.fwf",
+ write.fwf(file = "test.fwf",
             colnames = FALSE,
+            justify = "right",
             width = c(4, 2, 25, 15))
 
 ```
