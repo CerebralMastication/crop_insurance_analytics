@@ -265,7 +265,7 @@ sob_limited_group_1 %>%
 
 ---
 
-# wait.. wft is `%>%`?
+# wait.. wtf is `%>%`?
 
 --
 
